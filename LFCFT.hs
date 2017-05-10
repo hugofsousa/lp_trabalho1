@@ -1,9 +1,23 @@
+-- Com o suporte a funçoes de primeira classe, as expressçoes do tipo Let se tornam
+-- açucar sintatico, uma vez que podem ser trivialmente reescritas em termos de
+-- aplicacoes de expressoes lambda (considere o exemplo abaixo como uma ilustracao).
+-- Revise a implementacao da linguagem LFCF para que ocorra uma
+-- traducao entre expressoes do tipo Let em expressoes Lambda, para que a avaliacao 
+-- de uma expressao Let corresponda a avaliacao da expressao Lambda
+-- correspondente. O resultado deve ser a linguagem LFCFT (T de transformacao
+-- de Let em expressoes Lambda)
+
+-- let x = 10
+--    in x + 1
+--
+-- R: (\x -> x + 1) 10
+
+module LFCFT where 
+
 -- | A linguagem LFCF suporta tanto 
 -- expressoes identificadas (LET) quanto 
 -- identificadores e funcoes de alta ordem
 -- (com o mecanismo de expressoes lambda). 
-
-module LFCF where 
 
 type Id = String
 

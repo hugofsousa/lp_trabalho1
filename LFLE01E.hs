@@ -68,5 +68,5 @@ substituicao subId val (Let boundId namedExp bodyExp)
 substituicao subId val (Ref var) 
  | subId == var = (Valor val)
  | otherwise = (Ref var)
-substituicao subId val (Aplicacao nome arg) = undefined
+substituicao subId val (Aplicacao nome exp) = Aplicacao nome (substituicao subId val exp)
 

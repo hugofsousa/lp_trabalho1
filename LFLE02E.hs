@@ -1,4 +1,7 @@
-module LFLE02 where 
+-- Considerando a linguagem LFLE02, implemente uma variação (LFLE02E) com
+-- escopo estático (utilize o capítulo 5 do livro base da disciplina como referência).
+
+module LFLE02E where 
 
 type Id = String
 type Nome = String

@@ -1,9 +1,15 @@
+-- Considerando a linguagem LFCF, implemente uma versao que posterga as substituicoes
+-- usando um ambiente que realiza o mapeamento entre identificadores e
+-- expressoes. Leia a Secao 6.4 do livro base da disciplina. O resultado deve ser a
+-- linguagem LFCFP (P de substituicoes postergadas).
+
+module LFCFP where 
+
 -- | A linguagem LFCF suporta tanto 
 -- expressoes identificadas (LET) quanto 
 -- identificadores e funcoes de alta ordem
 -- (com o mecanismo de expressoes lambda). 
 
-module LFCF where 
 
 type Id = String
 
