@@ -14,11 +14,6 @@
 
 module LFCFT where 
 
--- | A linguagem LFCF suporta tanto 
--- expressoes identificadas (LET) quanto 
--- identificadores e funcoes de alta ordem
--- (com o mecanismo de expressoes lambda). 
-
 type Id = String
 
 data Expressao = Valor Int
@@ -32,25 +27,15 @@ data Expressao = Valor Int
                | Aplicacao Expressao Expressao   
  deriving(Show, Eq)
 
--- | O interpretador da linguagem LFCF
--- (funcao 'avaliar') precisa ser ajustada, uma vez que
--- o tipo de retorno nao pode ser simplesmente
--- um inteiro.
--- 
--- Isso fica evidente quando refletimos sobre o valor que
--- deveria ser retornado com a avaliacao de uma 
--- expressao lambda (\x -> x + 1). A resposta mais
--- adequada para isso eh: a funcao avaliar retorna uma
--- nova expressao, que corresponde ou a um Valor inteiro
--- ou a uma expressao Lambda. 
-
 avaliar :: Expressao -> Expressao
 avaliar (Valor n) = Valor n
 avaliar (Soma e d) = avaliarExpBin e d (+)
 avaliar (Subtracao e d) = avaliarExpBin e d (-) 
 avaliar (Multiplicacao e d) = avaliarExpBin e d (*)
 avaliar (Divisao e d) = avaliarExpBin e d div
-avaliar (Let var expNomeada expCorpo) = avaliar (substituicao var (avaliar expNomeada) expCorpo)
+avaliar (Let var expNomeada expCorpo) = -- avaliar (substituicao var (avaliar expNomeada) expCorpo)
+  avaliar (Aplicacao (Lambda var expCorpo) expNomeada)
+
 avaliar (Ref var) = error "nao eh esperado avaliar uma referencia apos substituicao"
 avaliar (Lambda argFormal corpo) = (Lambda argFormal corpo)
 avaliar (Aplicacao exp1 exp2) = 

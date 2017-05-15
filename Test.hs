@@ -29,3 +29,5 @@ sum = DecFuncao "sum" ["x", "y"] (Soma (Ref "x") (Ref "y"))
 avaliar (Aplicacao "sum" [Valor 1, Valor 2]) [sum, inc]
 
 avaliar (substituicao "x" 3 (Aplicacao "sum" [Ref "x", (Soma (Ref "x") (Valor 1))])) [inc, sum]
+
+avaliar (Let "x" (Valor 10) (Soma (Ref "x") (Valor 1)))
