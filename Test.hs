@@ -19,3 +19,13 @@ avaliar (Let "x" (Soma (Valor 3) (Valor 2)) (Aplicacao "inc" (Ref "x"))) [inc]
 -- LFLE02E
 
 refs = [("x", 15), ("x", 2), ("y", 5)]
+
+
+
+-- LFLE01EMP
+inc = DecFuncao "inc" ["x"] (Soma (Ref "x") (Valor 1)) 
+sum = DecFuncao "sum" ["x", "y"] (Soma (Ref "x") (Ref "y"))
+
+avaliar (Aplicacao "sum" [Valor 1, Valor 2]) [sum, inc]
+
+avaliar (substituicao "x" 3 (Aplicacao "sum" [Ref "x", (Soma (Ref "x") (Valor 1))])) [inc, sum]

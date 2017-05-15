@@ -1,10 +1,4 @@
-module LFLE01 where 
-
--- A linguagem LFLE01 suporta tanto 
--- expressoes identificadas (LET) quanto 
--- identificadores e expressoes + funcoes. 
--- As funcoes aceitam apenas um argumento 
--- sem informacoes de tipo. 
+module LFLE01E where 
 
 type Id = String
 type Nome = String
@@ -23,10 +17,6 @@ data Expressao = Valor Int
                | Ref Id 
                | Aplicacao Nome Expressao
  deriving(Show, Eq)
-
--- O interpretador da linguagem LLE eh 
--- basicamente um avaliador de expressoes, mas 
--- com suporte a substituicao. 
 
 avaliar :: Expressao -> Ambiente -> Int
 avaliar (Valor n) _ = n
@@ -49,14 +39,6 @@ pesquisarFuncao nome (dec@(DecFuncao n a e):xs)
  | nome == n = dec
  | otherwise = pesquisarFuncao nome xs 
 
--- pesquisarFuncao nome ambiente =
---  let res = [dec | dec@(DecFuncao n a e) <- ambiente, nome == n]
---  in  case res of
---    [dec] = dec
---    (d:ds) = error "duplicidade de declaracao de funcao"
---    otherwise = error "funcao nao existe"
-
-     
 substituicao :: Id -> Int -> Expressao -> Expressao
 substituicao subId val (Valor n) = Valor n
 substituicao subId val (Soma e d) = Soma (substituicao subId val e) (substituicao subId val d)

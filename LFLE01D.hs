@@ -1,10 +1,4 @@
-module LFLE01 where 
-
--- A linguagem LFLE01 suporta tanto 
--- expressoes identificadas (LET) quanto 
--- identificadores e expressoes + funcoes. 
--- As funcoes aceitam apenas um argumento 
--- sem informacoes de tipo. 
+module LFLE01D where 
 
 type Id = String
 type Nome = String

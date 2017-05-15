@@ -8,11 +8,12 @@ type Id = String
 type Nome = String
 type Arg = String 
 
+type Args = [Arg]
+type Expressoes = [Expressao]
+
 type Ambiente = [DecFuncao]
  
-
--- TODO colocar arg como [arg] e substituir em todas as funçoes que aparecem
-data DecFuncao = DecFuncao Nome Arg Expressao 
+data DecFuncao = DecFuncao Nome Args Expressao 
 
 data Expressao = Valor Int
                | Soma Expressao Expressao
@@ -21,7 +22,7 @@ data Expressao = Valor Int
                | Divisao Expressao Expressao 
                | Let Id Expressao Expressao       
                | Ref Id 
-               | Aplicacao Nome Expressao
+               | Aplicacao Nome Expressoes
  deriving(Show, Eq)
 
 avaliar :: Expressao -> Ambiente -> Int
@@ -31,9 +32,9 @@ avaliar (Subtracao e d) amb = avaliar  e amb - avaliar d amb
 avaliar (Multiplicacao e d) amb =  avaliar e amb * avaliar d amb 
 avaliar (Divisao e d) amb = avaliar e amb `div` avaliar d amb
 
-avaliar (Aplicacao nome exp) amb = 
-  let (DecFuncao n arg corpo) = pesquisarFuncao nome amb
-  in avaliar (substituicao arg (avaliar exp amb) corpo) amb
+avaliar (Aplicacao nome (exp:exps)) amb = 
+  let (DecFuncao n (arg:args) corpo) = pesquisarFuncao nome amb
+  in avaliar (substituicaoLista (arg:args) (exp:exps) corpo amb) amb
 
 avaliar (Let subId expNomeada corpoExp) amb =
   avaliar (substituicao subId (avaliar expNomeada amb) corpoExp) amb
@@ -45,7 +46,13 @@ pesquisarFuncao nome (dec@(DecFuncao n a e):xs)
  | nome == n = dec
  | otherwise = pesquisarFuncao nome xs 
 
-     
+
+substituicaoLista [] [] corpo amb = corpo
+substituicaoLista [] _ _ amb = error ("Numero de argumentos insuficientes")
+substituicaoLista _ [] _ amb = error ("Numero de argumentos insuficientes")
+substituicaoLista (arg:args) (exp:exps) corpo amb = 
+  substituicaoLista args exps (substituicao arg (avaliar exp amb) corpo) amb
+
 substituicao :: Id -> Int -> Expressao -> Expressao
 substituicao subId val (Valor n) = Valor n
 substituicao subId val (Soma e d) = Soma (substituicao subId val e) (substituicao subId val d)
@@ -57,6 +64,10 @@ substituicao subId val (Let boundId namedExp bodyExp)
 substituicao subId val (Ref var) 
  | subId == var = (Valor val)
  | otherwise = (Ref var)
-substituicao subId val (Aplicacao nome exp) = Aplicacao nome (substituicao subId val exp)
 
+substituicao subId val (Aplicacao nome (exp:exps)) = 
+  Aplicacao nome (substituicaoNasExpressoes subId val (exp:exps))
 
+substituicaoNasExpressoes _ _ [] = []
+substituicaoNasExpressoes subId val (exp:exps) =
+  (substituicao subId val exp):(substituicaoNasExpressoes subId val exps)
